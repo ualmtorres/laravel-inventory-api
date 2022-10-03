@@ -14,10 +14,16 @@ class ProductController extends Controller
         try {
             $products = Product::all();
         } catch (Exception $e) {
-            return $this->failed_response($e);
+            return response()->json([
+                'data' => [],
+                'message' => $e->getMessage()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->successful_response($products);
+        return response()->json([
+            'data' => $products,
+            'message' => 'Succeed'
+        ], JsonResponse::HTTP_OK);
     }
 
     public function show($id)
@@ -25,10 +31,16 @@ class ProductController extends Controller
         try {
             $products = Product::find($id);
         } catch (Exception $e) {
-            return $this->failed_response($e);
+            return response()->json([
+                'data' => [],
+                'message' => $e->getMessage()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->successful_response($products);
+        return response()->json([
+            'data' => $products,
+            'message' => 'Succeed'
+        ], JsonResponse::HTTP_OK);
     }
 
     public function store(Request $request)
@@ -36,22 +48,34 @@ class ProductController extends Controller
         try {
             $products = Product::create($request->all());
         } catch (Exception $e) {
-            return $this->failed_response($e);
+            return response()->json([
+                'data' => [],
+                'message' => $e->getMessage()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->successful_response($products);
+        return response()->json([
+            'data' => $products,
+            'message' => 'Succeed'
+        ], JsonResponse::HTTP_OK);
     }
 
     public function update(Request $request, $id)
     {
         try {
             $products = Product::find($id)
-                        ->update($request->all());
+                ->update($request->all());
         } catch (Exception $e) {
-            return $this->failed_response($e);
+            return response()->json([
+                'data' => [],
+                'message' => $e->getMessage()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->successful_response($products);
+        return response()->json([
+            'data' => $products,
+            'message' => 'Succeed'
+        ], JsonResponse::HTTP_OK);
     }
 
     public function destroy($id)
@@ -59,25 +83,15 @@ class ProductController extends Controller
         try {
             $products = Product::destroy($id);
         } catch (Exception $e) {
-            return $this->failed_response($e);
+            return response()->json([
+                'data' => [],
+                'message' => $e->getMessage()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->successful_response($products);
-    }
-
-    function successful_response($data) 
-    {
         return response()->json([
-            'data' => $data,
+            'data' => $products,
             'message' => 'Succeed'
         ], JsonResponse::HTTP_OK);
-    }
-
-    function failed_response(Exception $e) 
-    {
-        return response()->json([
-            'data' => [],
-            'message'=>$e->getMessage()
-        ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
     }
 }
